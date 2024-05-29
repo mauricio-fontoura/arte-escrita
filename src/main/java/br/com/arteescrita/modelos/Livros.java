@@ -1,5 +1,24 @@
 package br.com.arteescrita.modelos;
 
-public record Livros() {
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonIgnoreProperties(ignoreUnknown=true)
+public record Livros(
+		
+		@JsonProperty("title")
+		String titulo,
+		
+		@JsonProperty("authors")
+		List<Autor> autor,
+		
+		@JsonProperty("languages")
+		List<String> traducao,
+		
+		@JsonProperty("download_count")
+		Integer baixados
+) {
 
 }
