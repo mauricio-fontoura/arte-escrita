@@ -2,18 +2,20 @@ package br.com.arteescrita.modelos;
 
 
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import jakarta.persistence.Column;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
 
 
 @JsonIgnoreProperties(ignoreUnknown=true)
 @Entity
-
+@Table(name="biblioteca_estantes")
 public class Estante {
 	
 	@Id
@@ -22,7 +24,6 @@ public class Estante {
 	
 	private String titulo;
 	
-	@Column(unique=true)
 	private String autor;
 
 	private Integer anoDeNascimento;
@@ -33,7 +34,10 @@ public class Estante {
 
 	private Integer baixados;
 	
-	//private Livros livros;
+	
+	public Estante() {
+		
+	}
 	
 	public Estante(Livros dados) {
 		this.titulo = dados.titulo();
@@ -43,6 +47,17 @@ public class Estante {
 		this.traducao = dados.traducao().get(0);
 		this.baixados = dados.baixados();
 	}
+	
+	public void EstanteAutor() {
+		this.autor = getAutor();
+		this.anoDeNascimento = getAnoDeNascimento();
+		this.anoDeFalecimento = getAnoDeFalecimento();
+		this.titulo = getTitulo();
+	}
+	
+	
+	
+	
 
 	public Long getId() {
 		return id;
@@ -99,7 +114,6 @@ public class Estante {
 	public void setBaixados(Integer baixados) {
 		this.baixados = baixados;
 	}
-
 	
 	@Override
 	public String toString() {
@@ -107,6 +121,8 @@ public class Estante {
 				+ ", anoDeNascimento=" + anoDeNascimento + ", anoDeFalecimento=" + anoDeFalecimento + ", traducao="
 				+ traducao + ", baixados=" + baixados + "]";
 	}
+
+	
 	
 	
 }

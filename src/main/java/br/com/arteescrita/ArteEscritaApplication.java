@@ -15,8 +15,12 @@ import br.com.arteescrita.repositorio.LivrosRepositorio;
 @SpringBootApplication
 public class ArteEscritaApplication implements CommandLineRunner{
 
-	@Autowired
+	
 	private LivrosRepositorio repositorio;
+	
+	public ArteEscritaApplication(LivrosRepositorio repositorio) {
+		this.repositorio = repositorio;
+	}
 	
 	public static void main(String[] args) {
 		SpringApplication.run(ArteEscritaApplication.class, args);

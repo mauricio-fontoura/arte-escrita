@@ -1,5 +1,6 @@
 package br.com.arteescrita.principal;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -15,6 +16,7 @@ public class Principal {
 	ConsumoAPI consumo = new ConsumoAPI();
 	ConverteDados converte = new ConverteDados();
 	private final String URL_BASE = "https://gutendex.com/books/";
+	
 	private LivrosRepositorio repositorio;
 
 	public Principal(LivrosRepositorio repositorio) {
@@ -33,17 +35,14 @@ public class Principal {
 				BuscarLivrosWeb();
 			}
 				break;
-			case 2: {
+			case 2: {ObterLivrosRegistrados();
 			}
 				break;
-			case 3: {
-			}
+			case 3: {ListarAutoresRegistrados();}
 				break;
-			case 4: {
-			}
+			case 4: {ListarAutoresVivos();}
 				break;
-			case 5: {
-			}
+			case 5: {ListarLivrosTraducao();}
 				break;
 			}
 
@@ -51,6 +50,7 @@ public class Principal {
 
 	}
 
+	
 	public void MostrarOpcao() {
 		System.out.println("""
 				\n
@@ -67,7 +67,7 @@ public class Principal {
 	}
 
 	// Consumo de API
-	public Livros getDadosLivro() {
+	public Livros ObterDadosLivro() {
 
 		Scanner escrever = new Scanner(System.in);
 		System.out.println("\nInsira um livro de sua escolha");
@@ -84,9 +84,81 @@ public class Principal {
 	}
 
 	private void BuscarLivrosWeb() {
-		Livros dados = getDadosLivro();
+		Livros dados = ObterDadosLivro();
 		Estante livro = new Estante(dados);
 		repositorio.save(livro);
+	}
+	
+	private void ObterLivrosRegistrados() {
+		List<Estante> estante = new ArrayList<>();
+		estante = repositorio.findAll();
+		
+		for (Integer i = 0; i < repositorio.count(); i++) {
+			String titulo = estante.get(i).getTitulo();
+			String autor = estante.get(i).getAutor();
+			String idioma = estante.get(i).getTraducao();
+			Integer baixados = estante.get(i).getAnoDeFalecimento();
+			
+			System.out.println("------------------ LIVRO ----------------");
+			System.out.println("Titulo: " + titulo);
+			System.out.println("Autor: " + autor);
+			System.out.println("Idioma: " + idioma);
+			System.out.println("Número de downloads: " + baixados);
+			System.out.println("-----------------------------------------\n");
+		}
+		
+	
+	}
+
+	private void ListarAutoresRegistrados() {
+		List<Estante> estante = new ArrayList<>();
+		estante = repositorio.findAll();
+		
+		for (Integer i = 0; i < repositorio.count(); i++) {
+			List<String> obras = new ArrayList<>();
+			String livros = estante.get(i).getTitulo();
+			Integer anoDeNascimento = estante.get(i).getAnoDeNascimento();
+			Integer anoDeFalecimento = estante.get(i).getAnoDeFalecimento();
+			String autor = estante.get(i).getAutor();
+			
+			obras.add(livros);
+			System.out.println("--------------- ESCRITOR ---------------");
+			System.out.println("Autor: " + autor);
+			System.out.println("Ano de Nascimento: " + anoDeNascimento);
+			System.out.println("Ano de Falecimento: " + anoDeFalecimento);
+			System.out.println("Livros: " + obras);
+			System.out.println("----------------------------------------\n");
+		}
+		
+	}
+
+	private void ListarAutoresVivos() {
+		List<Estante> estante = new ArrayList<>();
+		estante = repositorio.findByAutor("Machado de Assis");
+		System.out.println(estante);
+	}
+
+	private void ListarLivrosTraducao() {
+		Scanner leitura = new Scanner(System.in);
+		List<Estante> pt = new ArrayList<>();
+		System.out.println("""
+				Insira um idioma para realizar a busca
+				pt - Português
+				en - Inglês
+				fr - Francês
+				es - Espanhol
+				""");
+		String opcao = leitura.nextLine();
+		
+		pt = repositorio.findByTraducaoContainingIgnoreCase(opcao);
+		
+		if (pt.isEmpty()) {
+			System.out.println("Deu ruim");
+		} else {
+			System.out.println(pt);
+		}
+		
+		
 	}
 
 }

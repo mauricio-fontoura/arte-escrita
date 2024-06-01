@@ -5,6 +5,8 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import jakarta.persistence.OneToMany;
+
 @JsonIgnoreProperties(ignoreUnknown=true)
 public record Livros(
 		
@@ -19,6 +21,8 @@ public record Livros(
 		
 		@JsonProperty("download_count")
 		Integer baixados
+		
+		
 ) {
 
 }
